@@ -1,0 +1,7 @@
+[package]
+name = "genetic_planner"
+version = "0.1.0"
+authors = ["Marco Torsello <md1512@gmail.com>"]
+
+[dependencies]
+rand = ">=0.3"
