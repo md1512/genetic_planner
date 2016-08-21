@@ -3,5 +3,11 @@ name = "genetic_planner"
 version = "0.1.0"
 authors = ["Marco Torsello <md1512@gmail.com>"]
 
+description = "A simple library that use genetic algorithm to resolve planning problems"
+homepage = "https://github.com/md1512/genetic_planner"
+repository = "https://github.com/md1512/genetic_planner"
+license = "LGPL-3.0"
+keywords =["genetic","planner","ia"]
+
 [dependencies]
 rand = ">=0.3"
