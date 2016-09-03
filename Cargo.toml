@@ -1,6 +1,6 @@
 [package]
 name = "genetic_planner"
-version = "0.1.1"
+version = "0.1.5"
 authors = ["Marco Torsello <md1512@gmail.com>"]
 
 description = "A simple library that use genetic algorithm to resolve planning problems"
