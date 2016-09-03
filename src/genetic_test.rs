@@ -57,8 +57,8 @@ fn fitness() {
     assert_eq!(f2, 0);
 }
 
-fn default_population_configuration() -> Population_Configuration<u8> {
-    Population_Configuration {
+fn default_population_configuration() -> PopulationConfiguration<u8> {
+    PopulationConfiguration {
         population_size: 64,
         fitness: simple_fitness,
         genelenght: 8,

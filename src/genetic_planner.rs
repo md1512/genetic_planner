@@ -102,7 +102,7 @@ fn fitness_planner<T>(i: Individual<Action<T>>) -> i32
 pub fn find_solution<T>(c: PlannerConfiguration) -> Node<T>
     where T: State + Clone
 {
-    let pc = Population_Configuration {
+    let pc = PopulationConfiguration {
         genelenght: c.max_moves,
         population_size: c.population_size,
         elitism_size: c.elitism_size,

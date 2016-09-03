@@ -56,11 +56,11 @@ impl<T> Individual<T>
 }
 pub struct Population<T> {
     pub individuals_and_scores: Vec<(Individual<T>, i32)>,
-    pub configuration: Population_Configuration<T>,
+    pub configuration: PopulationConfiguration<T>,
 }
 
 #[derive(Clone)]
-pub struct Population_Configuration<T> {
+pub struct PopulationConfiguration<T> {
     pub fitness: fn(Individual<T>) -> i32,
     pub population_size: usize,
     pub genelenght: usize,
@@ -74,7 +74,7 @@ impl<T> Population<T>
     where T: Clone + Rand
 {
     pub fn new_with_vec(vec: Vec<(Individual<T>, i32)>,
-                        configuration: Population_Configuration<T>)
+                        configuration: PopulationConfiguration<T>)
                         -> Population<T> {
         Population {
             individuals_and_scores: vec,
@@ -82,7 +82,7 @@ impl<T> Population<T>
         }
     }
 
-    pub fn new(configuration: Population_Configuration<T>) -> Population<T> {
+    pub fn new(configuration: PopulationConfiguration<T>) -> Population<T> {
         let mut v = Vec::<(Individual<T>, i32)>::new();
         for _ in 0..configuration.population_size {
             let i = Individual::<T>::new(configuration.genelenght);

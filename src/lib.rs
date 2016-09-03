@@ -1,8 +1,8 @@
 
 extern crate rand;
 
-mod genetic;
+pub mod genetic;
 mod genetic_test;
 
-mod genetic_planner;
+pub mod genetic_planner;
 mod genetic_planner_test;
