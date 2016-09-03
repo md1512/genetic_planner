@@ -103,11 +103,27 @@ impl<T> Population<T>
     }
 
     fn get_top(&self, size: usize) -> Vec<(Individual<T>, i32)> {
+        // Population::get_top_ric(self.individuals_and_scores, size)
         let mut v: Vec<(Individual<T>, i32)> = Vec::new();
-        let mut individuals = self.individuals_and_scores.clone();
-        individuals.sort_by_key(|a| -a.1);
-        for i in 0..size {
-            v.push(individuals.get(i).unwrap().clone());
+        let iter = self.individuals_and_scores.iter().clone();
+        if self.individuals_and_scores.len() <= size {
+            self.individuals_and_scores.clone();
+        } else {
+            let first_max = iter.max_by_key(|a| a.1);
+            v.push(first_max.unwrap().clone());
+            for _ in 1..size {
+                let mut max: Option<(Individual<T>, i32)> = None;
+                for is in self.individuals_and_scores.clone() {
+                    if max.clone().is_none() {
+                        max = Some(is.clone());
+                    } else if max.clone().unwrap().1 < is.1 && v.iter().all(|a| a.1 != is.1) {
+                        max = Some(is.clone());
+                    }
+                }
+                if max.is_some() {
+                    v.push(max.unwrap());
+                }
+            }
         }
         v
     }
