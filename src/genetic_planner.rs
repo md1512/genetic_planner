@@ -4,7 +4,7 @@ use rand::Rng;
 use genetic::*;
 
 pub trait State
-    where Self: Sized + Clone
+    where Self: Sized + Clone + Send + Sync + 'static
 {
     fn get_initial_state() -> Self;
     fn get_random_action() -> Action<Self>;
@@ -13,7 +13,7 @@ pub trait State
 }
 
 pub struct Node<T>
-    where T: State + Clone
+    where T: State + Clone + Send + Sync + 'static
 {
     pub state: T,
     pub actions: Vec<Action<T>>,
@@ -32,7 +32,7 @@ impl<T> Node<T>
 
 #[derive(Clone)]
 pub struct Action<T>
-    where T: State + Clone
+    where T: State + Clone + Send + Sync + 'static
 {
     pub action: fn(state: T) -> Option<T>,
     pub name: String,
@@ -56,7 +56,7 @@ pub struct PlannerConfiguration {
 }
 
 fn apply_actions<T>(i: Individual<Action<T>>) -> Node<T>
-    where T: State + Clone
+    where T: State + Clone + Send + Sync + 'static
 {
     let mut state = Some(T::get_initial_state());
     let mut old_state = state.clone();
@@ -93,14 +93,14 @@ fn apply_actions<T>(i: Individual<Action<T>>) -> Node<T>
 }
 
 fn fitness_planner<T>(i: Individual<Action<T>>) -> i32
-    where T: State + Clone
+    where T: State + Clone + Send + Sync + 'static
 {
     let node = apply_actions(i);
     -node.state.get_heuristic()
 }
 
 pub fn find_solution<T>(c: PlannerConfiguration) -> Node<T>
-    where T: State + Clone
+    where T: State + Clone + Send + Sync + 'static
 {
     let pc = PopulationConfiguration {
         genelenght: c.max_moves,

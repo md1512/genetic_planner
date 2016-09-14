@@ -1,13 +1,18 @@
 extern crate rand;
 use rand::{Rand, Rng};
 
+extern crate threadpool;
+use threadpool::ThreadPool;
+
+use std::sync::mpsc::channel;
+
 #[derive(Debug,Clone,PartialEq)]
-pub struct Individual<T> {
+pub struct Individual<T: 'static> {
     pub genes: Vec<T>,
 }
 
 impl<T> Individual<T>
-    where T: Clone + Rand
+    where T: Clone + Rand + Send + Sync + 'static
 {
     pub fn new(genelenght: usize) -> Individual<T> {
         let mut vec: Vec<T> = Vec::new();
@@ -54,13 +59,15 @@ impl<T> Individual<T>
         Individual::new_with_vec(v)
     }
 }
-pub struct Population<T> {
+
+#[derive(Clone)]
+pub struct Population<T: 'static> {
     pub individuals_and_scores: Vec<(Individual<T>, i32)>,
     pub configuration: PopulationConfiguration<T>,
 }
 
 #[derive(Clone)]
-pub struct PopulationConfiguration<T> {
+pub struct PopulationConfiguration<T: 'static> {
     pub fitness: fn(Individual<T>) -> i32,
     pub population_size: usize,
     pub genelenght: usize,
@@ -71,7 +78,7 @@ pub struct PopulationConfiguration<T> {
 }
 
 impl<T> Population<T>
-    where T: Clone + Rand
+    where T: Clone + Rand + Send + Sync + 'static
 {
     pub fn new_with_vec(vec: Vec<(Individual<T>, i32)>,
                         configuration: PopulationConfiguration<T>)
@@ -148,13 +155,22 @@ impl<T> Population<T>
         for elite in self.get_top(new_elitism_size) {
             v.push(elite);
         }
+        let (tx, rx) = channel();
+        let pool = ThreadPool::new(4);
         for _ in new_elitism_size..self.configuration.population_size {
-            let i1 = self.tournment();
-            let i2 = self.tournment();
-            let ic = i1.crossover(i2, self.configuration.uniform_rate);
-            let im = ic.mutate(self.configuration.mutation_rate);
-            let f = (self.configuration.fitness)(im.clone());
-            v.push((im, f));
+            let tx = tx.clone();
+            let pop = (*self).clone();
+            pool.execute(move || {
+                let i1 = pop.tournment();
+                let i2 = pop.tournment();
+                let ic = i1.crossover(i2, pop.configuration.uniform_rate);
+                let im = ic.mutate(pop.configuration.mutation_rate);
+                let f = (pop.configuration.fitness)(im.clone());
+                tx.send((im, f)).unwrap();
+            });
+        }
+        for _ in new_elitism_size..self.configuration.population_size {
+            v.push(rx.recv().unwrap());
         }
         Population::new_with_vec(v, self.configuration.clone())
     }
