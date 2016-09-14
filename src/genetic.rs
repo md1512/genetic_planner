@@ -25,7 +25,6 @@ impl<T> Individual<T>
         Individual { genes: v.clone() }
     }
 
-
     pub fn crossover(&self, i2: Individual<T>, uniform_rate: f32) -> Individual<T> {
         let i1 = self.clone();
         let mut v: Vec<T> = Vec::new();
@@ -110,7 +109,6 @@ impl<T> Population<T>
     }
 
     fn get_top(&self, size: usize) -> Vec<(Individual<T>, i32)> {
-        // Population::get_top_ric(self.individuals_and_scores, size)
         let mut v: Vec<(Individual<T>, i32)> = Vec::new();
         let iter = self.individuals_and_scores.iter().clone();
         if self.individuals_and_scores.len() <= size {
@@ -122,9 +120,9 @@ impl<T> Population<T>
                 let mut max: Option<(Individual<T>, i32)> = None;
                 for is in self.individuals_and_scores.clone() {
                     if max.clone().is_none() {
-                        max = Some(is.clone());
+                        max = Some(is);
                     } else if max.clone().unwrap().1 < is.1 && v.iter().all(|a| a.1 != is.1) {
-                        max = Some(is.clone());
+                        max = Some(is);
                     }
                 }
                 if max.is_some() {

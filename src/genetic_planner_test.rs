@@ -52,7 +52,7 @@ fn flop(_: Coin) -> Option<Coin> {
 }
 
 #[test]
-fn test() {
+fn test_find_solution() {
     let pc = PlannerConfiguration {
         max_moves: 4,
         population_size: 16,
@@ -65,4 +65,18 @@ fn test() {
     assert!(n.state.is_goal());
     assert!(n.actions.len() == 1);
     assert!(n.actions.get(0).unwrap().name == "Flip");
+}
+
+#[test]
+#[allow(unused_variables)]
+fn test_find_best_fit() {
+    let pc = PlannerConfiguration {
+        max_moves: 4,
+        population_size: 16,
+        tournmant_size: 4,
+        elitism_size: 1,
+        uniform_rate: 0.5,
+        mutation_rate: 0.5,
+    };
+    let n: Node<Coin> = find_best_fit(pc, 10);
 }

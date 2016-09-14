@@ -1,10 +1,11 @@
 #[cfg(test)]
 
 extern crate rand;
-use rand::*;
 use genetic::*;
 
 #[test]
+#[allow(dead_code)]
+#[allow(unused_variables)]
 fn create_individual() {
     let i1: Individual<u8> = Individual::new(8);
 }
@@ -35,6 +36,7 @@ fn crossover_test() {
     assert!(equals);
 }
 
+#[allow(dead_code)]
 fn simple_fitness(i: Individual<u8>) -> i32 {
     let mut acc = 0i32;
     for g in i.genes {
@@ -57,6 +59,7 @@ fn fitness() {
     assert_eq!(f2, 0);
 }
 
+#[allow(dead_code)]
 fn default_population_configuration() -> PopulationConfiguration<u8> {
     PopulationConfiguration {
         population_size: 64,
@@ -70,6 +73,7 @@ fn default_population_configuration() -> PopulationConfiguration<u8> {
 }
 
 #[test]
+#[allow(unused_variables)]
 fn create_population() {
     let p = Population::<u8>::new(default_population_configuration());
 }

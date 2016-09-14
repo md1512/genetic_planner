@@ -124,3 +124,27 @@ pub fn find_solution<T>(c: PlannerConfiguration) -> Node<T>
         actions: node.actions,
     }
 }
+
+pub fn find_best_fit<T>(c: PlannerConfiguration, iterations: usize) -> Node<T>
+    where T: State + Clone + Send + Sync + 'static
+{
+    let pc = PopulationConfiguration {
+        genelenght: c.max_moves,
+        population_size: c.population_size,
+        elitism_size: c.elitism_size,
+        tournmant_size: c.tournmant_size,
+        uniform_rate: c.uniform_rate,
+        mutation_rate: c.mutation_rate,
+        fitness: fitness_planner,
+    };
+    let mut pop = Population::new(pc);
+    for _ in 0..iterations {
+        pop = pop.evolve();
+    }
+    let best_actions = pop.get_fittest();
+    let node = apply_actions(best_actions.unwrap().0);
+    Node {
+        state: node.state,
+        actions: node.actions,
+    }
+}
