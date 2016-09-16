@@ -3,7 +3,7 @@ extern crate rand;
 use rand::Rng;
 use genetic_planner::*;
 
-#[derive(Clone)]
+#[derive(Clone,PartialEq)]
 struct Coin {
     pub head: bool,
 }
@@ -60,6 +60,7 @@ fn test_find_solution() {
         elitism_size: 1,
         uniform_rate: 0.5,
         mutation_rate: 0.5,
+        threadpool_size: 2,
     };
     let n: Node<Coin> = find_solution(pc);
     assert!(n.state.is_goal());
@@ -77,6 +78,7 @@ fn test_find_best_fit() {
         elitism_size: 1,
         uniform_rate: 0.5,
         mutation_rate: 0.5,
+        threadpool_size: 2,
     };
     let n: Node<Coin> = find_best_fit(pc, 10);
 }

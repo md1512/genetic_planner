@@ -69,6 +69,7 @@ fn default_population_configuration() -> PopulationConfiguration<u8> {
         uniform_rate: 0.5f32,
         tournmant_size: 16,
         elitism_size: 2,
+        threadpool_size: 8,
     }
 }
 

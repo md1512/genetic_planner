@@ -5,6 +5,7 @@ extern crate threadpool;
 use threadpool::ThreadPool;
 
 use std::sync::mpsc::channel;
+use std::cmp::PartialEq;
 
 #[derive(Debug,Clone,PartialEq)]
 pub struct Individual<T: 'static> {
@@ -12,7 +13,7 @@ pub struct Individual<T: 'static> {
 }
 
 impl<T> Individual<T>
-    where T: Clone + Rand + Send + Sync + 'static
+    where T: Clone + Rand + Send + Sync + PartialEq + 'static
 {
     pub fn new(genelenght: usize) -> Individual<T> {
         let mut vec: Vec<T> = Vec::new();
@@ -74,10 +75,11 @@ pub struct PopulationConfiguration<T: 'static> {
     pub mutation_rate: f32,
     pub tournmant_size: usize,
     pub elitism_size: usize,
+    pub threadpool_size: usize,
 }
 
 impl<T> Population<T>
-    where T: Clone + Rand + Send + Sync + 'static
+    where T: Clone + Rand + Send + Sync + PartialEq + 'static
 {
     pub fn new_with_vec(vec: Vec<(Individual<T>, i32)>,
                         configuration: PopulationConfiguration<T>)
@@ -121,7 +123,7 @@ impl<T> Population<T>
                 for is in self.individuals_and_scores.clone() {
                     if max.clone().is_none() {
                         max = Some(is);
-                    } else if max.clone().unwrap().1 < is.1 && v.iter().all(|a| a.1 != is.1) {
+                    } else if max.clone().unwrap().1 < is.1 && v.iter().all(|a| a.0 != is.0) {
                         max = Some(is);
                     }
                 }
@@ -154,7 +156,11 @@ impl<T> Population<T>
             v.push(elite);
         }
         let (tx, rx) = channel();
-        let pool = ThreadPool::new(4);
+        let pool = ThreadPool::new(if self.configuration.threadpool_size > 0 {
+            self.configuration.threadpool_size
+        } else {
+            1
+        });
         for _ in new_elitism_size..self.configuration.population_size {
             let tx = tx.clone();
             let pop = (*self).clone();

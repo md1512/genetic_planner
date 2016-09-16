@@ -154,11 +154,11 @@ impl gp::State for Maze {
             maze: [[e, e, e, w, e, e, w, w, e, e],
                    [e, e, e, w, e, e, e, e, e, e],
                    [e, e, w, w, e, e, e, e, e, e],
-                   [e, e, e, e, e, e, w, e, e, e],
+                   [e, e, e, f, e, e, w, e, e, e],
                    [e, e, w, w, e, e, w, e, e, e],
                    [e, e, w, w, e, e, w, e, e, e],
                    [e, e, w, e, e, e, w, w, e, e],
-                   [e, e, e, f, e, e, w, e, e, e],
+                   [e, e, e, e, e, e, w, e, e, e],
                    [e, e, e, e, e, e, w, w, e, e],
                    [e, e, e, e, e, e, w, w, e, e]],
             bot_position: (0, 0),
@@ -201,12 +201,13 @@ fn print(m: &Option<Maze>) {
 
 fn main() {
     let pc = PlannerConfiguration {
-        max_moves: 20,
+        max_moves: 40,
         population_size: 1000,
         tournmant_size: 40,
         elitism_size: 3,
         uniform_rate: 0.5,
         mutation_rate: 0.7,
+        threadpool_size: 16,
     };
     let mut state: Maze = Maze::get_initial_state();
     let n: Node<Maze> = gp::find_solution(pc);

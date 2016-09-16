@@ -1,6 +1,9 @@
 extern crate rand;
 use rand::Rand;
 use rand::Rng;
+
+use std::cmp::PartialEq;
+
 use genetic::*;
 
 pub trait State
@@ -46,6 +49,14 @@ impl<T> Rand for Action<T>
     }
 }
 
+impl<T> PartialEq for Action<T>
+    where T: State + Clone + Send + Sync + 'static
+{
+    fn eq(&self, other: &Action<T>) -> bool {
+        self.name != other.name
+    }
+}
+
 pub struct PlannerConfiguration {
     pub max_moves: usize,
     pub population_size: usize,
@@ -53,6 +64,7 @@ pub struct PlannerConfiguration {
     pub tournmant_size: usize,
     pub uniform_rate: f32,
     pub mutation_rate: f32,
+    pub threadpool_size: usize,
 }
 
 fn apply_actions<T>(i: Individual<Action<T>>) -> Node<T>
@@ -99,10 +111,10 @@ fn fitness_planner<T>(i: Individual<Action<T>>) -> i32
     -node.state.get_heuristic()
 }
 
-pub fn find_solution<T>(c: PlannerConfiguration) -> Node<T>
+fn get_population_configuration<T>(c: PlannerConfiguration) -> PopulationConfiguration<Action<T>>
     where T: State + Clone + Send + Sync + 'static
 {
-    let pc = PopulationConfiguration {
+    PopulationConfiguration {
         genelenght: c.max_moves,
         population_size: c.population_size,
         elitism_size: c.elitism_size,
@@ -110,7 +122,14 @@ pub fn find_solution<T>(c: PlannerConfiguration) -> Node<T>
         uniform_rate: c.uniform_rate,
         mutation_rate: c.mutation_rate,
         fitness: fitness_planner,
-    };
+        threadpool_size: c.threadpool_size,
+    }
+}
+
+pub fn find_solution<T>(c: PlannerConfiguration) -> Node<T>
+    where T: State + Clone + Send + Sync + 'static
+{
+    let pc = get_population_configuration(c);
     let mut pop = Population::new(pc);
     let mut best_actions = pop.get_fittest();
     let mut node: Node<T> = apply_actions(best_actions.unwrap().0);
@@ -128,15 +147,7 @@ pub fn find_solution<T>(c: PlannerConfiguration) -> Node<T>
 pub fn find_best_fit<T>(c: PlannerConfiguration, iterations: usize) -> Node<T>
     where T: State + Clone + Send + Sync + 'static
 {
-    let pc = PopulationConfiguration {
-        genelenght: c.max_moves,
-        population_size: c.population_size,
-        elitism_size: c.elitism_size,
-        tournmant_size: c.tournmant_size,
-        uniform_rate: c.uniform_rate,
-        mutation_rate: c.mutation_rate,
-        fitness: fitness_planner,
-    };
+    let pc = get_population_configuration(c);
     let mut pop = Population::new(pc);
     for _ in 0..iterations {
         pop = pop.evolve();
