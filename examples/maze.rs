@@ -133,17 +133,7 @@ impl gp::State for Maze {
         } else {
             (finish.1, position.1)
         };
-        let mut walls: usize = 0;
-        for i in top..bottom {
-            for j in left..right {
-                walls += if maze[i][j] == Tile::Wall {
-                    1
-                } else {
-                    0
-                };
-            }
-        }
-        ((bottom - top + right - left) + walls) as i32
+        (bottom - top + right - left) as i32
     }
 
     fn get_initial_state() -> Maze {
@@ -154,7 +144,7 @@ impl gp::State for Maze {
             maze: [[e, e, e, w, e, e, w, w, e, e],
                    [e, e, e, w, e, e, e, e, e, e],
                    [e, e, w, w, e, e, e, e, e, e],
-                   [e, e, e, f, e, e, w, e, e, e],
+                   [e, e, e, e, e, e, w, e, e, f],
                    [e, e, w, w, e, e, w, e, e, e],
                    [e, e, w, w, e, e, w, e, e, e],
                    [e, e, w, e, e, e, w, w, e, e],
@@ -202,8 +192,8 @@ fn print(m: &Option<Maze>) {
 fn main() {
     let pc = PlannerConfiguration {
         max_moves: 40,
-        population_size: 1000,
-        tournmant_size: 40,
+        population_size: 200,
+        tournmant_size: 20,
         elitism_size: 3,
         uniform_rate: 0.5,
         mutation_rate: 0.7,

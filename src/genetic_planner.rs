@@ -125,12 +125,11 @@ fn get_population_configuration<T>(c: PlannerConfiguration) -> PopulationConfigu
         threadpool_size: c.threadpool_size,
     }
 }
-
-pub fn find_solution<T>(c: PlannerConfiguration) -> Node<T>
+pub fn find_solution_and_population_from_population<T>(pop: Population<Action<T>>)
+                                                       -> (Node<T>, Population<Action<T>>)
     where T: State + Clone + Send + Sync + 'static
 {
-    let pc = get_population_configuration(c);
-    let mut pop = Population::new(pc);
+    let mut pop = pop.clone();
     let mut best_actions = pop.get_fittest();
     let mut node: Node<T> = apply_actions(best_actions.unwrap().0);
     while !node.state.is_goal() {
@@ -138,24 +137,72 @@ pub fn find_solution<T>(c: PlannerConfiguration) -> Node<T>
         best_actions = pop.get_fittest();
         node = apply_actions(best_actions.unwrap().0);
     }
-    Node {
+    (Node {
         state: node.state,
         actions: node.actions,
-    }
+    },
+     pop)
 }
 
-pub fn find_best_fit<T>(c: PlannerConfiguration, iterations: usize) -> Node<T>
+pub fn find_solution_and_population<T>(c: PlannerConfiguration) -> (Node<T>, Population<Action<T>>)
     where T: State + Clone + Send + Sync + 'static
 {
     let pc = get_population_configuration(c);
-    let mut pop = Population::new(pc);
+    let pop = Population::new(pc);
+    find_solution_and_population_from_population(pop)
+}
+
+pub fn find_solution<T>(c: PlannerConfiguration) -> Node<T>
+    where T: State + Clone + Send + Sync + 'static
+{
+    find_solution_and_population(c).0
+}
+
+pub fn find_solution_from_population<T>(pop: Population<Action<T>>) -> Node<T>
+    where T: State + Clone + Send + Sync + 'static
+{
+    find_solution_and_population_from_population(pop).0
+}
+
+pub fn find_best_and_population_after_iterations_from_population<T>
+    (pop: Population<Action<T>>,
+     iterations: usize)
+     -> (Node<T>, Population<Action<T>>)
+    where T: State + Clone + Send + Sync + 'static
+{
+    let mut pop = pop.clone();
     for _ in 0..iterations {
         pop = pop.evolve();
     }
     let best_actions = pop.get_fittest();
     let node = apply_actions(best_actions.unwrap().0);
-    Node {
+    (Node {
         state: node.state,
         actions: node.actions,
-    }
+    },
+     pop)
+}
+
+pub fn find_best_and_population_after_iterations<T>(c: PlannerConfiguration,
+                                                    iterations: usize)
+                                                    -> (Node<T>, Population<Action<T>>)
+    where T: State + Clone + Send + Sync + 'static
+{
+    let pc = get_population_configuration(c);
+    let pop = Population::new(pc);
+    find_best_and_population_after_iterations_from_population(pop, iterations)
+}
+
+pub fn find_best_after_iterations<T>(c: PlannerConfiguration, iterations: usize) -> Node<T>
+    where T: State + Clone + Send + Sync + 'static
+{
+    find_best_and_population_after_iterations(c, iterations).0
+}
+
+pub fn find_best_after_iterations_from_population<T>(pop: Population<Action<T>>,
+                                                     iterations: usize)
+                                                     -> Node<T>
+    where T: State + Clone + Send + Sync + 'static
+{
+    find_best_and_population_after_iterations_from_population(pop, iterations).0
 }

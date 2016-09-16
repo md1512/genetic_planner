@@ -80,5 +80,5 @@ fn test_find_best_fit() {
         mutation_rate: 0.5,
         threadpool_size: 2,
     };
-    let n: Node<Coin> = find_best_fit(pc, 10);
+    let n: Node<Coin> = find_best_after_iterations(pc, 10);
 }

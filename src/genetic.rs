@@ -64,6 +64,7 @@ impl<T> Individual<T>
 pub struct Population<T: 'static> {
     pub individuals_and_scores: Vec<(Individual<T>, i32)>,
     pub configuration: PopulationConfiguration<T>,
+    pub generation: usize,
 }
 
 #[derive(Clone)]
@@ -82,11 +83,13 @@ impl<T> Population<T>
     where T: Clone + Rand + Send + Sync + PartialEq + 'static
 {
     pub fn new_with_vec(vec: Vec<(Individual<T>, i32)>,
-                        configuration: PopulationConfiguration<T>)
+                        configuration: PopulationConfiguration<T>,
+                        generation: usize)
                         -> Population<T> {
         Population {
             individuals_and_scores: vec,
             configuration: configuration,
+            generation: generation,
         }
     }
 
@@ -97,7 +100,7 @@ impl<T> Population<T>
             let score = (configuration.fitness)(i.clone());
             v.push((i, score));
         }
-        Population::new_with_vec(v, configuration)
+        Population::new_with_vec(v, configuration, 0)
     }
 
     pub fn get_fittest(&self) -> Option<(Individual<T>, i32)> {
@@ -176,6 +179,6 @@ impl<T> Population<T>
         for _ in new_elitism_size..self.configuration.population_size {
             v.push(rx.recv().unwrap());
         }
-        Population::new_with_vec(v, self.configuration.clone())
+        Population::new_with_vec(v, self.configuration.clone(), self.generation + 1)
     }
 }
