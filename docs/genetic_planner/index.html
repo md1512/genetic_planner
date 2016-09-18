@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `genetic_planner` mod in crate `genetic_planner`.">
+    <meta name="description" content="API documentation for the Rust `genetic_planner` crate.">
     <meta name="keywords" content="rust, rustlang, rust-lang, genetic_planner">
 
-    <title>genetic_planner::genetic_planner - Rust</title>
+    <title>genetic_planner - Rust</title>
 
-    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
-    <link rel="stylesheet" type="text/css" href="../../main.css">
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
     
 
     
@@ -28,7 +28,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='../index.html'>genetic_planner</a></p><script>window.sidebarCurrent = {name: 'genetic_planner', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+        <p class='location'></p><script>window.sidebarCurrent = {name: 'genetic_planner', ty: 'mod', relpath: '../'};</script>
     </nav>
 
     <nav class="sub">
@@ -43,97 +43,25 @@
     </nav>
 
     <section id='main' class="content mod">
-<h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>genetic_planner</a>::<wbr><a class='mod' href=''>genetic_planner</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>genetic_planner</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-156' class='srclink' href='../../src/genetic_planner/src/genetic_planner.rs.html#1-238' title='goto source code'>[src]</a></span></h1>
-<h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+               </span><a id='src-0' class='srclink' href='../src/genetic_planner/src/lib.rs.html#2-9' title='goto source code'>[src]</a></span></h1>
+<h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class='struct' href='struct.Action.html'
-                                  title='genetic_planner::genetic_planner::Action'>Action</a></td>
-                           <td class='docblock short'>
-                                <p>Contains a function applicable to T and a name</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='struct' href='struct.Plan.html'
-                                  title='genetic_planner::genetic_planner::Plan'>Plan</a></td>
-                           <td class='docblock short'>
-                                <p>Contains the actions of a Plan</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='struct' href='struct.PlannerConfiguration.html'
-                                  title='genetic_planner::genetic_planner::PlannerConfiguration'>PlannerConfiguration</a></td>
-                           <td class='docblock short'>
-                                <p>Contains the configuration of the Planner</p>
-                           </td>
-                       </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class='trait' href='trait.State.html'
-                                  title='genetic_planner::genetic_planner::State'>State</a></td>
+                           <td><a class='mod' href='genetic/index.html'
+                                  title='genetic_planner::genetic'>genetic</a></td>
                            <td class='docblock short'>
                                 
                            </td>
-                       </tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class='fn' href='fn.find_best_after_iterations.html'
-                                  title='genetic_planner::genetic_planner::find_best_after_iterations'>find_best_after_iterations</a></td>
-                           <td class='docblock short'>
-                                <p>Found the best plan after <iterations> iterations</p>
-                           </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='fn' href='fn.find_best_after_iterations_from_population.html'
-                                  title='genetic_planner::genetic_planner::find_best_after_iterations_from_population'>find_best_after_iterations_from_population</a></td>
+                           <td><a class='mod' href='genetic_planner/index.html'
+                                  title='genetic_planner::genetic_planner'>genetic_planner</a></td>
                            <td class='docblock short'>
-                                <p>Found the best plan after <iterations> iterations starting from a Population</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='fn' href='fn.find_best_and_population_after_iterations.html'
-                                  title='genetic_planner::genetic_planner::find_best_and_population_after_iterations'>find_best_and_population_after_iterations</a></td>
-                           <td class='docblock short'>
-                                <p>Found the best plan and its Population after <iterations> iterations</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='fn' href='fn.find_best_and_population_after_iterations_from_population.html'
-                                  title='genetic_planner::genetic_planner::find_best_and_population_after_iterations_from_population'>find_best_and_population_after_iterations_from_population</a></td>
-                           <td class='docblock short'>
-                                <p>Found the best plan and its Population, after <iterations> iterations</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='fn' href='fn.find_solution.html'
-                                  title='genetic_planner::genetic_planner::find_solution'>find_solution</a></td>
-                           <td class='docblock short'>
-                                <p>Find a plan</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='fn' href='fn.find_solution_and_population.html'
-                                  title='genetic_planner::genetic_planner::find_solution_and_population'>find_solution_and_population</a></td>
-                           <td class='docblock short'>
-                                <p>Find a Plan and its Population</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='fn' href='fn.find_solution_and_population_from_population.html'
-                                  title='genetic_planner::genetic_planner::find_solution_and_population_from_population'>find_solution_and_population_from_population</a></td>
-                           <td class='docblock short'>
-                                <p>Find a Plan and its Population starting a Population</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class='fn' href='fn.find_solution_from_population.html'
-                                  title='genetic_planner::genetic_planner::find_solution_from_population'>find_solution_from_population</a></td>
-                           <td class='docblock short'>
-                                <p>Find a plan starting from a Population</p>
+                                
                            </td>
                        </tr></table></section>
     <section id='search' class="content hidden"></section>
@@ -189,13 +117,13 @@
     
 
     <script>
-        window.rootPath = "../../";
+        window.rootPath = "../";
         window.currentCrate = "genetic_planner";
         window.playgroundUrl = "";
     </script>
-    <script src="../../jquery.js"></script>
-    <script src="../../main.js"></script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
     
-    <script defer src="../../search-index.js"></script>
+    <script defer src="../search-index.js"></script>
 </body>
 </html>

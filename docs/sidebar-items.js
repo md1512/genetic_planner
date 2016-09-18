@@ -1,1 +1,0 @@
-initSidebarItems({"mod":[["genetic",""],["genetic_planner",""]]});
