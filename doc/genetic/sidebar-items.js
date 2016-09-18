@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Individual","Rappresent a candidate solution for the problem"],["Population","A set of Individuals"],["PopulationConfiguration","Rappresent the configuration associated to a Population"]]});
