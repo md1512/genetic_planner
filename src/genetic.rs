@@ -7,6 +7,8 @@ use threadpool::ThreadPool;
 use std::sync::mpsc::channel;
 use std::cmp::PartialEq;
 
+
+/// Rappresent a candidate solution for the problem
 #[derive(Debug,Clone,PartialEq)]
 pub struct Individual<T: 'static> {
     pub genes: Vec<T>,
@@ -15,17 +17,22 @@ pub struct Individual<T: 'static> {
 impl<T> Individual<T>
     where T: Clone + Rand + Send + Sync + PartialEq + 'static
 {
-    pub fn new(genelenght: usize) -> Individual<T> {
+    /// Create a new individual which contains a vector of genenumber of random initiliazed T
+    pub fn new(genenumber: usize) -> Individual<T> {
         let mut vec: Vec<T> = Vec::new();
-        for _ in 0..genelenght {
+        for _ in 0..genenumber {
             vec.push(rand::random::<T>());
         }
         Individual { genes: vec.clone() }
     }
+
+    /// Create a new individual from a vector of T
     pub fn new_with_vec(v: Vec<T>) -> Individual<T> {
         Individual { genes: v.clone() }
     }
 
+    /// Return an Individual<T> which is the result of the crossover operation
+    /// between self and the second Individual<T>, accordingly the uniform_rate parameter
     pub fn crossover(&self, i2: Individual<T>, uniform_rate: f32) -> Individual<T> {
         let i1 = self.clone();
         let mut v: Vec<T> = Vec::new();
@@ -45,6 +52,7 @@ impl<T> Individual<T>
         Individual::new_with_vec(v)
     }
 
+    /// Return an Individual<T> which is the result of the mutate operation, accordingly the mutation_rate parameter
     pub fn mutate(&self, mutation_rate: f32) -> Individual<T> {
         let i = self.clone();
         let mut v: Vec<T> = Vec::new();
@@ -59,29 +67,43 @@ impl<T> Individual<T>
         Individual::new_with_vec(v)
     }
 }
-
+/// A set of Individuals
 #[derive(Clone)]
 pub struct Population<T: 'static> {
+    /// Contains set of Individual and the relative score
     pub individuals_and_scores: Vec<(Individual<T>, i32)>,
+    /// Contains the configurations used to create the Population
     pub configuration: PopulationConfiguration<T>,
+    /// Rappresent the generation of the Population
     pub generation: usize,
 }
 
+/// Rappresent the configuration associated to a Population
 #[derive(Clone)]
 pub struct PopulationConfiguration<T: 'static> {
+    /// Fitness function used to calculate the score of an Individual
     pub fitness: fn(Individual<T>) -> i32,
+    /// Size of the Population
     pub population_size: usize,
-    pub genelenght: usize,
+    /// Number of genes of each Individual
+    pub genenumber: usize,
+    /// Parameter used by the crossover function
     pub uniform_rate: f32,
+    /// Parameter used by the mutate function
     pub mutation_rate: f32,
+    /// Size of the set used to select the parent of the offsprings
     pub tournmant_size: usize,
+    /// Number of Individual to copy in the next generation
     pub elitism_size: usize,
+    /// Number of thread used during the evolve function
     pub threadpool_size: usize,
 }
 
 impl<T> Population<T>
     where T: Clone + Rand + Send + Sync + PartialEq + 'static
 {
+    /// Create a new Population from a vector of individuals,
+    /// a configuration and the number of the generation
     pub fn new_with_vec(vec: Vec<(Individual<T>, i32)>,
                         configuration: PopulationConfiguration<T>,
                         generation: usize)
@@ -93,16 +115,19 @@ impl<T> Population<T>
         }
     }
 
+    /// Create a new random generation accordingly the configuration
     pub fn new(configuration: PopulationConfiguration<T>) -> Population<T> {
         let mut v = Vec::<(Individual<T>, i32)>::new();
         for _ in 0..configuration.population_size {
-            let i = Individual::<T>::new(configuration.genelenght);
+            let i = Individual::<T>::new(configuration.genenumber);
             let score = (configuration.fitness)(i.clone());
             v.push((i, score));
         }
         Population::new_with_vec(v, configuration, 0)
     }
 
+    /// Get the Individual and the relative score of the Individual 
+    /// with the highest score
     pub fn get_fittest(&self) -> Option<(Individual<T>, i32)> {
         let individuals = self.individuals_and_scores.clone();
         let opt = individuals.iter().max_by_key(|a| a.1);
@@ -113,15 +138,16 @@ impl<T> Population<T>
         }
     }
 
-    fn get_top(&self, size: usize) -> Vec<(Individual<T>, i32)> {
+    /// Get the Individuals with the highest score 
+    fn get_top(&self, number: usize) -> Vec<(Individual<T>, i32)> {
         let mut v: Vec<(Individual<T>, i32)> = Vec::new();
         let iter = self.individuals_and_scores.iter().clone();
-        if self.individuals_and_scores.len() <= size {
+        if self.individuals_and_scores.len() <= number {
             self.individuals_and_scores.clone();
         } else {
             let first_max = iter.max_by_key(|a| a.1);
             v.push(first_max.unwrap().clone());
-            for _ in 1..size {
+            for _ in 1..number {
                 let mut max: Option<(Individual<T>, i32)> = None;
                 for is in self.individuals_and_scores.clone() {
                     if max.clone().is_none() {
@@ -138,6 +164,8 @@ impl<T> Population<T>
         v
     }
 
+    /// Get the Individual with the highest score from a random selection
+    /// of the individuals of the population
     fn tournment(&self) -> Individual<T> {
         let mut v: Vec<(Individual<T>, i32)> = Vec::new();
         for _ in 0..self.configuration.tournmant_size {
@@ -147,6 +175,8 @@ impl<T> Population<T>
         v.iter().max_by_key(|a| a.1).unwrap().0.clone()
     }
 
+    /// Create a new Population from the current, using the crossover 
+    /// and mutation  operator
     pub fn evolve(&self) -> Population<T> {
         let mut v: Vec<(Individual<T>, i32)> = Vec::new();
         let new_elitism_size = if self.configuration.elitism_size >

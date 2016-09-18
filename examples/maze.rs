@@ -1,6 +1,6 @@
 extern crate genetic_planner;
 use genetic_planner::genetic_planner as gp;
-use genetic_planner::genetic_planner::{State, Action, Node, PlannerConfiguration};
+use genetic_planner::genetic_planner::{State, Action, Plan, PlannerConfiguration};
 
 
 extern crate rand;
@@ -188,10 +188,10 @@ fn print(m: &Option<Maze>) {
         println!("None");
     }
 }
-
+/// Find the path for a bot in a maze 
 fn main() {
     let pc = PlannerConfiguration {
-        max_moves: 40,
+        max_actions: 40,
         population_size: 200,
         tournmant_size: 20,
         elitism_size: 3,
@@ -199,8 +199,9 @@ fn main() {
         mutation_rate: 0.7,
         threadpool_size: 16,
     };
+    println1("[W] Wall\n [F] Finish \n <B> Bot\n");
     let mut state: Maze = Maze::get_initial_state();
-    let n: Node<Maze> = gp::find_solution(pc);
+    let n: Plan<Maze> = gp::find_solution(pc);
     let mut j = 0;
     for i in n.actions {
         println!("({}):{}", j, i.name);

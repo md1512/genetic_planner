@@ -64,7 +64,7 @@ fn default_population_configuration() -> PopulationConfiguration<u8> {
     PopulationConfiguration {
         population_size: 64,
         fitness: simple_fitness,
-        genelenght: 8,
+        genenumber: 8,
         mutation_rate: 0.5f32,
         uniform_rate: 0.5f32,
         tournmant_size: 16,

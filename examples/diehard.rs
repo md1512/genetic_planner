@@ -1,6 +1,6 @@
 extern crate genetic_planner;
 use genetic_planner::genetic_planner as gp;
-use genetic_planner::genetic_planner::{State, Action, Node, PlannerConfiguration};
+use genetic_planner::genetic_planner::{State, Action, Plan, PlannerConfiguration};
 
 
 extern crate rand;
@@ -156,10 +156,13 @@ impl gp::State for Cans {
     }
 }
 
+/// The Dia Hard Riddle:
+/// You are given a 5 gallon jug and a 3 gallon jug in front of a fountain.
+/// Measure out exactly 4 gallons of water.
 
 fn main() {
     let pc = PlannerConfiguration {
-        max_moves: 20,
+        max_actions: 20,
         population_size: 100,
         tournmant_size: 40,
         elitism_size: 3,
@@ -168,7 +171,7 @@ fn main() {
         threadpool_size: 32,
     };
     let mut state: Cans = Cans::get_initial_state();
-    let n: Node<Cans> = gp::find_best_after_iterations(pc, 1000);
+    let n: Plan<Cans> = gp::find_best_after_iterations(pc, 500);
     let mut j = 0;
     for i in n.actions {
         println!("({}):{}", j, i.name);

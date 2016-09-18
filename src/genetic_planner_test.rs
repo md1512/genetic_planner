@@ -54,7 +54,7 @@ fn flop(_: Coin) -> Option<Coin> {
 #[test]
 fn test_find_solution() {
     let pc = PlannerConfiguration {
-        max_moves: 4,
+        max_actions: 4,
         population_size: 16,
         tournmant_size: 4,
         elitism_size: 1,
@@ -62,7 +62,7 @@ fn test_find_solution() {
         mutation_rate: 0.5,
         threadpool_size: 2,
     };
-    let n: Node<Coin> = find_solution(pc);
+    let n: Plan<Coin> = find_solution(pc);
     assert!(n.state.is_goal());
     assert!(n.actions.len() == 1);
     assert!(n.actions.get(0).unwrap().name == "Flip");
@@ -72,7 +72,7 @@ fn test_find_solution() {
 #[allow(unused_variables)]
 fn test_find_best_fit() {
     let pc = PlannerConfiguration {
-        max_moves: 4,
+        max_actions: 4,
         population_size: 16,
         tournmant_size: 4,
         elitism_size: 1,
@@ -80,5 +80,5 @@ fn test_find_best_fit() {
         mutation_rate: 0.5,
         threadpool_size: 2,
     };
-    let n: Node<Coin> = find_best_after_iterations(pc, 10);
+    let n: Plan<Coin> = find_best_after_iterations(pc, 10);
 }
