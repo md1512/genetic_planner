@@ -161,6 +161,7 @@ impl gp::State for Cans {
 /// Measure out exactly 4 gallons of water.
 
 fn main() {
+    println!("Running...");
     let pc = PlannerConfiguration {
         max_actions: 20,
         population_size: 100,

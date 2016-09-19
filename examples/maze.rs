@@ -190,6 +190,7 @@ fn print(m: &Option<Maze>) {
 }
 /// Find the path for a bot in a maze 
 fn main() {
+    println!("Running...");
     let pc = PlannerConfiguration {
         max_actions: 40,
         population_size: 200,
@@ -199,9 +200,9 @@ fn main() {
         mutation_rate: 0.7,
         threadpool_size: 16,
     };
-    println1("[W] Wall\n [F] Finish \n <B> Bot\n");
     let mut state: Maze = Maze::get_initial_state();
     let n: Plan<Maze> = gp::find_solution(pc);
+    println!("[W] Wall [F] Finish <B> Bot\n");
     let mut j = 0;
     for i in n.actions {
         println!("({}):{}", j, i.name);
