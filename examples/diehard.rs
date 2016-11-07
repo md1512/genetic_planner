@@ -8,13 +8,14 @@ use rand::Rng;
 
 use std::fmt;
 
-const CAN_A_CAPACITY: usize = 5;
-const CAN_B_CAPACITY: usize = 3;
+const CAN_A_CAPACITY: u8 = 5;
+const CAN_B_CAPACITY: u8 = 3;
+const TARGET: u8 = 4;
 
 #[derive(Clone)]
 struct Cans {
-    can_a: usize,
-    can_b: usize,
+    can_a: u8,
+    can_b: u8,
 }
 
 
@@ -68,7 +69,7 @@ fn empty_b(c: Cans) -> Option<Cans> {
 }
 
 fn fill_a_with_b(c: Cans) -> Option<Cans> {
-    if c.can_b == 0 {
+    if c.can_b == 0 || c.can_a == CAN_A_CAPACITY {
         None
     } else {
         let (a, b) = if c.can_a + c.can_b > CAN_A_CAPACITY {
@@ -84,7 +85,7 @@ fn fill_a_with_b(c: Cans) -> Option<Cans> {
 }
 
 fn fill_b_with_a(c: Cans) -> Option<Cans> {
-    if c.can_a == 0 {
+    if c.can_a == 0 || c.can_b == 5 {
         None
     } else {
         let (b, a) = if c.can_a + c.can_b > CAN_B_CAPACITY {
@@ -102,14 +103,14 @@ fn fill_b_with_a(c: Cans) -> Option<Cans> {
 
 impl gp::State for Cans {
     fn is_goal(&self) -> bool {
-        self.can_a == 4
+        self.can_a == TARGET
     }
 
     fn get_heuristic(&self) -> i32 {
-        (if self.can_a > 4 {
-            self.can_a - 4
+        (if self.can_a > TARGET {
+            self.can_a - TARGET
         } else {
-            4 - self.can_a
+            TARGET - self.can_a
         }) as i32
     }
 
